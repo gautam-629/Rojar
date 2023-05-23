@@ -4,3 +4,10 @@ export const phoneNumberSchema = Joi.string()
   .length(10)
   .pattern(/^(98|97)/)
   .required();
+
+  export const verityOtpSchema=Joi.object({
+      otp:Joi.string().required(),
+      phoneNumber:Joi.string().length(10).pattern(/^(98|97)/)
+      .required(),
+      hash:Joi.string().required()
+  })

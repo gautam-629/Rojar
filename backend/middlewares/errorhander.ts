@@ -1,22 +1,29 @@
-import { NextFunction ,Request,Response} from "express";
+import { NextFunction, Request, Response } from "express";
 import { DEBUG_MODE } from "../config";
 import { ValidationError } from "joi";
-const errorHandler=(err:Error,req:Request,res:Response,next:NextFunction)=>{
-           let statusCode=500;
-           let data={
-            message:'internal serer error',
-            ...(DEBUG_MODE==='true' && {originalError:err.stack} )
-           }
+import CustomErrorHandler from "../services/customErrorHandler";
+const errorHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {
+  let statusCode = 500;
+  let data = {
+    message: 'internal serer error',
+    ...(DEBUG_MODE === 'true' && { originalError: err.stack })
+  }
 
-           if(err instanceof ValidationError){
-              statusCode=422;
-              data={
-                message:err.message
-              }
+  if (err instanceof ValidationError) {
+    statusCode = 422;
+    data = {
+      message: err.message
+    }
 
-           }
+  }
+  if (err instanceof CustomErrorHandler) {
+    statusCode = err.statusCode;
+    data = {
+      message: err.message
+    }
+  }
 
-           return res.status(statusCode).json(data)
+  return res.status(statusCode).json(data)
 }
 
 export default errorHandler;
