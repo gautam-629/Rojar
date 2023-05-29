@@ -17,7 +17,7 @@ const authController = {
       const otp = OtpServices.generateOtp();
 
       //hash
-      const ttl = 1000 * 60 * 10;
+      const ttl = 1000 * 60 * 10; 
       const expireTime = Date.now() + ttl; // 10 min
       const data = `${phoneNumber}.${otp}.${expireTime}`;
       const hash = HashService.hashOtp(data);
