@@ -5,6 +5,7 @@ import HashService from '../../services/hashService';
 import CustomErrorHandler from "../../services/customErrorHandler";
 import userModels from "../../models/userModels";
 import TokenServices from "../../services/tokenServices";
+import { IUser } from "../../type";
 const authController = {
    async sendOtp(req: Request, res: Response, next: NextFunction) {
       const { phoneNumber } = req.body;
@@ -17,7 +18,7 @@ const authController = {
       const otp = OtpServices.generateOtp();
 
       //hash
-      const ttl = 1000 * 60 * 10; 
+      const ttl = 1000 * 60 * 60*24; 
       const expireTime = Date.now() + ttl; // 10 min
       const data = `${phoneNumber}.${otp}.${expireTime}`;
       const hash = HashService.hashOtp(data);
@@ -30,7 +31,6 @@ const authController = {
          return next(error);
       }
    },
-
 
    async verityOtp(req: Request, res: Response, next: any) {
       // validate the request
@@ -56,21 +56,21 @@ const authController = {
       }
 
       // create user
-      let user;
-      let accessToken;
-      let refreshToken;
+      
+     let user: IUser | null;
       try {
-         user = userModels.findOne({ phoneNumber });
+       user = await userModels.findOne({ phoneNumber });
          if (!user) {
-            user = await userModels.create({ phoneNumber })
+           const newUser= await userModels.create({ phoneNumber });
+           user=newUser.toObject();
          }
 
          //generate tokens
-         accessToken = TokenServices.generateAccessToken({
+       let accessToken = TokenServices.generateAccessToken({
             _id: user._id,
             activated: false,
          });
-         refreshToken = TokenServices.generateRefressToken({
+      let  refreshToken = TokenServices.generateRefressToken({
             _id: user._id,
             activated: false,
          });
@@ -78,12 +78,15 @@ const authController = {
          // store into database
          TokenServices.storeRefreshToken(refreshToken, user._id, next);
 
+         res.json({ 
+            user:user,
+            accessToken:accessToken,
+            refreshToken:refreshToken
+          })
       } catch (error) {
          return next(error);
       }
 
-
-      res.json({ message: 'ok' })
    },
 }
 

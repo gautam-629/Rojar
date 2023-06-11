@@ -7,7 +7,6 @@ class CustomErrorHandler extends Error{
         this.statusCode=statusCode;
         this.message=message;
     }
-
     static alreadyExist(message:string) {
         return new CustomErrorHandler(409, message);
     }
@@ -15,9 +14,11 @@ class CustomErrorHandler extends Error{
     static timeExpire(message:string='Time expire') {
         return new CustomErrorHandler(500, message);
     }
-
     static wrongCredentials(message:string='Username or password is wrong!'){
         return new CustomErrorHandler (401,message);
+    }
+    static unAuthorized(message:string = 'unAuthorized') {
+        return new CustomErrorHandler(401, message);
     }
 }
 export default CustomErrorHandler;
