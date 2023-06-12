@@ -5,3 +5,7 @@ export interface IUser{
     activated:boolean;
     role:string;
 }
+
+export interface IUserPayload{
+    _id:string 
+}

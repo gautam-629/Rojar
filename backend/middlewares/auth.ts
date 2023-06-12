@@ -1,12 +1,8 @@
 import { NextFunction,Response,Request } from "express";
 import CustomErrorHandler from "../services/customErrorHandler";
 import TokenServices from "../services/tokenServices";
-import { JwtPayload } from "jsonwebtoken";
+import { IUserPayload } from "../type";
 
-interface IUserPayload{
-    _id:string 
-    activated: false 
-}
 declare global {
     namespace Express {
       interface Request {

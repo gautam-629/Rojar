@@ -18,7 +18,7 @@ const authController = {
       const otp = OtpServices.generateOtp();
 
       //hash
-      const ttl = 1000 * 60 * 60*24; 
+      const ttl = 1000 * 60 * 60 * 24;
       const expireTime = Date.now() + ttl; // 10 min
       const data = `${phoneNumber}.${otp}.${expireTime}`;
       const hash = HashService.hashOtp(data);
@@ -56,38 +56,48 @@ const authController = {
       }
 
       // create user
-      
-     let user: IUser | null;
+
+      let user: IUser | null;
       try {
-       user = await userModels.findOne({ phoneNumber });
+         user = await userModels.findOne({ phoneNumber });
          if (!user) {
-           const newUser= await userModels.create({ phoneNumber });
-           user=newUser.toObject();
+            const newUser = await userModels.create({ phoneNumber });
+            user = newUser.toObject();
          }
 
          //generate tokens
-       let accessToken = TokenServices.generateAccessToken({
+         let accessToken = TokenServices.generateAccessToken({
             _id: user._id,
-            activated: false,
          });
-      let  refreshToken = TokenServices.generateRefressToken({
+         let refreshToken = TokenServices.generateRefressToken({
             _id: user._id,
-            activated: false,
          });
 
          // store into database
          TokenServices.storeRefreshToken(refreshToken, user._id, next);
 
-         res.json({ 
-            user:user,
-            accessToken:accessToken,
-            refreshToken:refreshToken
-          })
+         res.json({
+            user: user,
+            accessToken: accessToken,
+            refreshToken: refreshToken
+         })
       } catch (error) {
          return next(error);
       }
 
    },
+
+  async logout(req: Request, res: Response, next: NextFunction){
+          try {
+            const { refreshToken } = req.body;
+            await TokenServices.removeToken(refreshToken);
+          } catch (error) {
+            return next(error)
+          }
+
+          res.json({user:null});
+   }
+
 }
 
 export default authController;

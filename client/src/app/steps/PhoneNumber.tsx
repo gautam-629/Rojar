@@ -1,14 +1,14 @@
+   "use client"
 import React, { FunctionComponent } from 'react'
-
 const PhoneNumber:FunctionComponent<{
-  click:Function
-}> = ({click}) => {
+  handleOnNext():void;
+}> = ({handleOnNext}) => {
   return (
       <div>
         <h1>PhoneNumber</h1>
-        <button onClick={(e)=>click()}>next</button>
+        <button onClick={(e)=>handleOnNext()}>next</button>
       </div>
   )
 }
 
-export default PhoneNumber
+export default PhoneNumber;

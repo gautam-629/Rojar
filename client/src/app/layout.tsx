@@ -1,3 +1,4 @@
+import SlideBar from './components/shared/SlideBar';
 import './globals.css'
 import { Nunito_Sans } from 'next/font/google'
 
@@ -18,7 +19,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={nuto.className}>{children}</body>
+
+      <body className={nuto.className}>
+        <SlideBar/>
+        {children}
+        </body>
     </html>
   )
 }
