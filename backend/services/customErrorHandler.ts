@@ -20,5 +20,9 @@ class CustomErrorHandler extends Error{
     static unAuthorized(message:string = 'unAuthorized') {
         return new CustomErrorHandler(401, message);
     }
+
+    static notFound(message:string = 'not Found') {
+        return new CustomErrorHandler(404, message);
+    }
 }
 export default CustomErrorHandler;

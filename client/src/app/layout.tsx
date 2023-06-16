@@ -1,7 +1,8 @@
+import Navbar from './components/shared/Navbar';
 import SlideBar from './components/shared/SlideBar';
 import './globals.css'
-import { Nunito_Sans } from 'next/font/google'
-
+import { Nunito_Sans } from 'next/font/google';
+import { Providers } from './provider';
 const nuto = Nunito_Sans({
   weight: '400',
   subsets: ['latin'],
@@ -19,11 +20,23 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-
       <body className={nuto.className}>
-        <SlideBar/>
-        {children}
-        </body>
+       
+          <div className='grid grid-cols-12 px-1'>
+            <div className='col-span-3'>
+              <SlideBar />
+            </div>
+            <div className='col-span-9 px-5'>
+              <Navbar />
+              {/* <Providers> */}
+              {children}
+              {/* </Providers> */}
+             
+            </div>
+          </div>
+     
+      </body>
+
     </html>
   )
 }

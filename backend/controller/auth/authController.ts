@@ -13,7 +13,7 @@ const authController = {
       try {
          const value = await phoneNumberSchema.validateAsync(phoneNumber);
       } catch (error) {
-         return next(error)
+         return next(error);
       }
       const otp = OtpServices.generateOtp();
 
@@ -26,7 +26,7 @@ const authController = {
       //send otp
       try {
          // await OtpServices.sendBySms(`+977${phoneNumber}`,otp,next);
-         res.json({ hash: `${hash}.${expireTime}`, otp })
+         res.json({ hash: `${hash}.${expireTime}`, otp,phoneNumber })
       } catch (error) {
          return next(error);
       }

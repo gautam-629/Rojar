@@ -11,3 +11,8 @@ export const phoneNumberSchema = Joi.string()
       .required(),
       hash:Joi.string().required()
   })
+
+  export const activateScheme=Joi.object({
+    name:Joi.string().required().min(3).max(20),
+    avatar:Joi.string().required()
+  })
